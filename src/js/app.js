@@ -1,22 +1,31 @@
-function compare(a, b) {
-    if (a.key[0] < b.key[0]) { return -1; }
-    return 0;
-  }
+export default function orderByProps(object, order = []) {
+    const arr = [];
+    order.forEach((elem) => {
+      if (elem in object) {
+        arr.push({
+          key: elem,
+          value: object[elem],
+        });
+      }
+    });
   
-  const sortingByProps = (object, arr) => {
-    const newArr = [];
-    const dirArr = [];
-  
+    const arr1 = [];
     for (const prop in object) {
-      if (arr.includes(prop)) {
-        newArr.push({ key: prop, value: object[prop] });
-      } else {
-        dirArr.push({ key: prop, value: object[prop] });
+      if (order && !order.includes(prop)) {
+        arr1.push({
+          key: prop,
+          value: object[prop],
+        });
+        arr1.sort((a, b) => {
+          if (a.key > b.key) {
+            return 1;
+          }
+          if (a.key < b.key) {
+            return -1;
+          }
+          return 0;
+        });
       }
     }
-    const result = newArr.concat(dirArr.sort(compare));
-  
-    return result;
-  };
-  
-  export default sortingByProps;
+    return [...arr, ...arr1];
+  }

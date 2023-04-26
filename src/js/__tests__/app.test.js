@@ -1,61 +1,42 @@
 import orderByProps from '../app';
+const obj = {
+  name: 'мечник',
+  health: 10,
+  level: 2,
+  attack: 80,
+  defence: 40,
+};
 
-test('Should sort by user-sort and then alphabetically', () => {
+test('Порядок элементов', () => {
   const expected = [
-    { key: 'level', value: 2 },
-    { key: 'defence', value: 40 },
-    { key: 'attack', value: 80 },
-    { key: 'health', value: 10 },
     { key: 'name', value: 'мечник' },
+    { key: 'level', value: 2 },
+    { key: 'attack', value: 80 },
+    { key: 'defence', value: 40 },
+    { key: 'health', value: 10 },
   ];
-
-  const received = orderByProps({
-    name: 'мечник',
-    health: 10,
-    level: 2,
-    attack: 80,
-    defence: 40,
-  }, ['level', 'defence']);
-
-  expect(received).toEqual(expected);
+  expect(orderByProps(obj, ['name', 'level']))
+    .toEqual(expected);
 });
 
-test('Should sort alphabetically if there no user sort given', () => {
-  const expected = [
-    { key: 'attack', value: 80 },
-    { key: 'defence', value: 40 },
-    { key: 'health', value: 10 },
-    { key: 'level', value: 2 },
-    { key: 'name', value: 'мечник' },
-  ];
-
-  const received = orderByProps({
-    name: 'мечник',
-    health: 10,
-    level: 2,
-    attack: 80,
-    defence: 40,
-  });
-
-  expect(received).toEqual(expected);
+test('Возврат результата', () => {
+  expect(orderByProps(obj))
+    .toEqual([
+      { key: 'attack', value: 80 },
+      { key: 'defence', value: 40 },
+      { key: 'health', value: 10 },
+      { key: 'level', value: 2 },
+      { key: 'name', value: 'мечник' },
+    ]);
 });
 
-test('Should ignore unknown properties', () => {
-  const expected = [
-    { key: 'level', value: 2 },
-    { key: 'attack', value: 80 },
-    { key: 'defence', value: 40 },
-    { key: 'health', value: 10 },
-    { key: 'name', value: 'мечник' },
-  ];
-
-  const received = orderByProps({
-    name: 'мечник',
-    health: 10,
-    level: 2,
-    attack: 80,
-    defence: 40,
-  }, ['unknown', 'level']);
-
-  expect(received).toEqual(expected);
+test('Соответствие порядка элементов', () => {
+  expect(orderByProps(obj, ['level', 'defence', 'health', 'name', 'attack']))
+    .toEqual([
+      { key: 'level', value: 2 },
+      { key: 'defence', value: 40 },
+      { key: 'health', value: 10 },
+      { key: 'name', value: 'мечник' },
+      { key: 'attack', value: 80 },
+    ]);
 });
